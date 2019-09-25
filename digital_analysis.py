@@ -63,7 +63,7 @@ class RCPacket:
 
         # Create and return bitstream
         packet_data = self.signal[packet_start - 10 : packet_end + 10] # pad with 10 lows 
-        packet = BitstreamPacket("A" ,packet_data, packet_start - 10, packet_end + 10, self.sample_freq)
+        packet = BitstreamPacket(self.name, packet_data, packet_start - 10, packet_end + 10, self.sample_freq)
         return packet 
 
 
