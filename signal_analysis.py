@@ -8,15 +8,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import wave
 from scipy import signal
+from digital_analysis import RCPacket, BitstreamPacket
 
 # Test data
-
 sample_315mhz = "Data/315.022_FM-Sample-Bit-Alt.wav"
 sample_315mhz_2 = "Data/315.040_AM-squelsh-test.wav"
 sample_315mhz_3 = "Data/315.038_AM-high-low_t1.wav"
 rc_433mhz_1 = "Data/433.744_AM-RC-t1.wav"
 rc_433mhz_3 = "Data/433.744_AM-RC-t3.wav"
 rc_433mhz_7 = "Data/433.744_AM-RC-t7.wav"
+rc_433mhz_cont_1 = "Data/433.740_AM-cont-p-t1.wav"
 
 print("MAIN: Starting signal processing")
 
@@ -26,7 +27,7 @@ print("MAIN: Starting signal processing")
 # plt.show()                   # Display the plot
 
 def main():
-    raw_sig = wave.open(rc_433mhz_7, 'rb')
+    raw_sig = wave.open(rc_433mhz_cont_1, 'rb')
     ReportWavMetrics(raw_sig)
 
     # Interpret
@@ -35,13 +36,33 @@ def main():
     time = np.linspace(0, len(sig_frames), num=len(sig_frames))
     # PlotRFSignal(time, sig_frames, 1)
 
+    
+
     # Get subset
-    sample_start = 39150
-    sample_end = 41000 # len(sig_frames)
+    sample_start = 72000
+    sample_end = 102000 # len(sig_frames)
     rf_section = sig_frames[sample_start:sample_end]
-    rf_sec_time = time[sample_start:sample_end]
-    rf_digitized = DigitizeSignal(0, rf_section)
-    PlotRFSignal(rf_sec_time, rf_digitized, 1)
+    rf_sec_time = time[sample_start:sample_end]    
+    rf_digitized = DigitizeSignal(2000, rf_section)
+    # PlotRFSignal(rf_sec_time, rf_digitized, 1)
+
+    # DSP
+    dsp_start = 82000 - sample_start
+    dsp_end = 86600 - sample_start
+    
+    # Quick look at what we're about to analyze
+    packet_y = rf_digitized[dsp_start : dsp_end]
+    packet_x = rf_sec_time[dsp_start : dsp_end]
+    # PlotRFSignal(packet_x, packet_y, 2)
+
+    # PlotSignal(packet_y, 3)
+    rc_packet_A = RCPacket("A", packet_y, 82000, 86600, False, 48)
+    rc_packet_A.body.analyze_all_pulses()
+    rc_packet_A.body.print_analysis()
+
+    # Plot Bitstream
+    bitstreamA = rc_packet_A.body.bitstream
+    PlotSignal(bitstreamA, 1, "Bitstream A")
 
     # Clean up
     raw_sig.close()
@@ -62,6 +83,12 @@ def PlotRFSignal(x, y, figNum):
     plt.figure(figNum)
     plt.title('RF Signal as .wav file')
     plt.plot(x,y)
+    plt.show()
+
+def PlotSignal(y, figNum, title):
+    plt.figure(figNum)
+    plt.title(title)
+    plt.plot(y)
     plt.show()
 
 def LPF(sig_in, fc, fs):
