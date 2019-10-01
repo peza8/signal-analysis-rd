@@ -34,17 +34,14 @@ def main():
     sig_frames = GetFrameSignal(raw_sig)
     fs = raw_sig.getframerate()
     time = np.linspace(0, len(sig_frames), num=len(sig_frames))
+    raw_sig.close()
     # PlotRFSignal(time, sig_frames, 1)
 
-    # Get subset
-    sample_start = 72000
-    sample_end = 102000 # len(sig_frames)
-    rf_section = sig_frames[sample_start:sample_end]
-    rf_sec_time = time[sample_start:sample_end]    
-    rf_digitized = DigitizeSignal(2000, rf_section)
-    PlotRFSignal(rf_sec_time, rf_digitized, 1)
+    # New code
+    rc_packet_full = RCPacket("First continuous press", sig_frames, 48)
 
     # Packet A bounds
+    """
     packet_A_start = 82000 - sample_start
     packet_A_end = 86600 - sample_start
     packet_A_sig = rf_digitized[packet_A_start : packet_A_end]
@@ -84,9 +81,7 @@ def main():
     rc_packet_D.body.print_analysis()
     bitstreamD = rc_packet_D.body.bitstream
     PlotSignal(bitstreamD, 4, "Bitstream D")
-
-    # Clean up
-    raw_sig.close()
+    """
 
 def ReportWavMetrics(wav_obj):
     print( "Number of channels",wav_obj.getnchannels())

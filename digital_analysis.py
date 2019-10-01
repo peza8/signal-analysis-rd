@@ -4,32 +4,100 @@
     September 2019
 """
 
-class RCPacket:
-    def __init__ (self, packet_name, digital_signal, sample_start_index, sample_end_index, pre_packet, fs):
-        self.name = packet_name
-        self.signal = digital_signal
-        self.start_index = sample_start_index
-        self.end_index = sample_end_index
-        self.pre_packet = pre_packet
-        self.sample_freq = fs       # kHz
+import matplotlib.pyplot as plt
+import numpy as np
+from collections import deque
 
-        if self.pre_packet:
-            self.pre_packet = self.getpacket(self.name + "pp", 0)
-            self.body = self.getpacket(self.name, self.pre_packet.end_index + 5)
-        else:
-            self.body = self.getpacket(self.name, 0)
-            
+class RCPacket:
+    def __init__ (self, packet_name, raw_signal, fs):
+        # Class 'consts'
+        self.digital_threshold = 2000 # can change
+
+        self.name = packet_name
+        self.analogue_signal = raw_signal
+        self.digital_signal = None
+        self.sample_freq = fs       # kHz
+        self.bitstreams = []
+
+        # Compute bitstreams
+        self.discretize_signal()
+        self.getallpackets()
+
+    # Discretize signal
+    def discretize_signal(self):
+        self.digital_signal = [0]*len(self.analogue_signal)
+        index = 0
+
+        for element in self.analogue_signal:
+            digital_val = 0
+            if element > self.digital_threshold:
+                digital_val = 1
+            self.digital_signal[index] = digital_val
+            index = index + 1
+        
+        # Temp - plot the digital signal
+        self.display_digital_sig("1", "Uncut digital signal")
+
+    # Parse the whole signal and look for packets
+    def getallpackets(self):
+        print("RC PACKET: Getting all packets")
+
+        # Loop state vars
+        search_index = 0
+        next_packet_name = 1
+
+        while (search_index < len(self.digital_signal)):
+            search_index = self.next_packet_search_start(search_index)
+            if search_index < 0:
+                break
+
+            # New packet found
+            next_packet = self.getpacket(next_packet_name, search_index)
+            self.bitstreams.append(next_packet)
+
+            search_index = next_packet.end_index
+            #next_packet_name = chr(ord(next_packet_name) + 1) 
+            next_packet_name = next_packet_name + 1
+
+        # Got all bitstreams
+        print("Got all bitstreams")
+        
+
+    def next_packet_search_start(self, start_index):
+        # arb, based on common data pattern
+        window_len = 100
+        accumulation_thresh = 10 
+
+        window = deque(self.digital_signal[start_index : start_index + window_len])
+        integral = window.count(1)
+        if integral > accumulation_thresh:
+            return start_index
+
+        for index in range(start_index, len(self.digital_signal)):
+            # sample is either 1 or zero
+            window.popleft()
+            next_bit = self.digital_signal[index]
+            window.append(next_bit)
+
+            # Compute the integral and add it to the array
+            integral = window.count(1)
+            if integral > accumulation_thresh:
+                return index
+        
+        print("RC PACKET: End - no more packets. Total packets = %i" % len(self.bitstreams))
+        return -1
+
     def getpacket(self, name, search_start_index): 
         packet_start = -1
         packet_end = -1
 
-        for i in range(search_start_index, len(self.signal)):
-            bit = self.signal[i]
+        for i in range(search_start_index, len(self.digital_signal)):
+            bit = self.digital_signal[i]
             if bit == 1:
                 # Look forward 5 samples
                 filter_pass = True
                 for j in range(5):
-                    if self.signal[i+j] == 0:
+                    if self.digital_signal[i+j] == 0:
                         # Noise - false high pulse
                         filter_pass = False
                         print("RC PACKET: Noise found at index %i", i+j)
@@ -47,8 +115,8 @@ class RCPacket:
 
         # Found start, now look for end
         contiguous_lows = 0
-        for k in range(packet_start, len(self.signal)):
-            if self.signal[k] == 0:
+        for k in range(packet_start, len(self.digital_signal)):
+            if self.digital_signal[k] == 0:
                 contiguous_lows = contiguous_lows + 1
             else:
                 contiguous_lows = 0
@@ -62,11 +130,19 @@ class RCPacket:
         assert packet_end > 0
 
         # Create and return bitstream
-        packet_data = self.signal[packet_start - 10 : packet_end + 10] # pad with 10 lows 
-        packet = BitstreamPacket(self.name, packet_data, packet_start - 10, packet_end + 10, self.sample_freq)
+        packet_data = self.digital_signal[packet_start - 10 : packet_end + 10] # pad with 10 lows 
+        packet = BitstreamPacket(name, packet_data, packet_start - 10, packet_end + 10, self.sample_freq)
         return packet 
 
+    def display_digital_sig(self, fignum, title):
+        RCPacket.plot_signal(self.digital_signal, fignum, title)
 
+    @staticmethod
+    def plot_signal(signal, fignum, title):
+        plt.figure(fignum)
+        plt.title(title)
+        plt.plot(signal)
+        plt.show()
          
 class BitstreamPacket:
     def __init__(self, packet_name, bitstream, sample_start_index, sample_end_index, fs):
@@ -155,7 +231,8 @@ class BitstreamPacket:
                     forward_bit = self.bitstream[j]
                     if forward_bit != 0:
                         filter_pass = False
-                        print("FE: Found noise at sample index %i" % i+j)
+                        fail_index = i+j
+                        print("FE: Found noise at sample index %i" % fail_index)
                         break
                 if not filter_pass:
                     continue
@@ -303,8 +380,8 @@ class Pulse:
 
         if self.ratio > 0.6:
             self.type = "Long"
-            self.bin = "1"
+            self.bin = "0"
         else:
             self.type = "Short"
-            self.bin = "0"
+            self.bin = "1"
 
