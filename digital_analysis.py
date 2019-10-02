@@ -22,6 +22,10 @@ class RCPacket:
 
         # Compute bitstreams
         self.discretize_signal()
+        
+        # Temp 
+        # self.convolution_graph()
+        
         self.getallpackets()
 
     # Discretize signal
@@ -37,7 +41,7 @@ class RCPacket:
             index = index + 1
         
         # Temp - plot the digital signal
-        # self.display_digital_sig("1", "Uncut digital signal")
+        self.display_digital_sig("1", "Uncut digital signal")
 
     # Parse the whole signal and look for packets
     def getallpackets(self):
@@ -63,8 +67,27 @@ class RCPacket:
         # Got all bitstreams
         print("Got all bitstreams")
     
+    def convolution_graph(self):
+        window_len = 100
+        accumulation_thresh = 10 
+        integral_signal = []
+
+        window = deque(self.digital_signal[0:window_len])
+        integral = window.count(1)
+        integral_signal.append(integral)
+
+        for index in range(window_len, len(self.digital_signal)):
+            next_bit = self.digital_signal[index]
+            window.popleft()
+            window.append(next_bit)
+            integral = window.count(1)
+            integral_signal.append(integral)
+
+        RCPacket.plot_signal(integral_signal, 100, "Integral signal")
+
+
     def next_packet_search_start(self, start_index):
-        # arb, based on common data pattern
+        # arb, based on common data pattern [specific to RC signal]
         window_len = 100
         accumulation_thresh = 10 
 
@@ -201,6 +224,9 @@ class BitstreamPacket:
         self.short_pulse_t = -1
         self.short_pulse_r = -1
         self.short_pulse_c = -1
+
+        # Have a look at bitstream
+        # self.display_bitstream(self.name, "Bitstream " + str(self.name))
 
         # Isolate pulses
         self.get_pulses()
@@ -367,9 +393,15 @@ class BitstreamPacket:
             return
 
         # Will only write bitstreams == 66 bits to file
-        if len(self.binary_str) == 66:
+        if len(self.binary_str) == 13:
             bitstr = self.binary_str + "\n"
             out_file.write(bitstr)
+
+    def display_bitstream(self, fignum, title):
+        plt.figure(fignum)
+        plt.title(title)
+        plt.plot(self.bitstream)
+        plt.show()
 
 class Pulse:
     def __init__(self, pulse_data, fs):

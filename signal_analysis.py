@@ -36,7 +36,7 @@ def main():
     # PlotRFSignal(time, sig_frames, 1)
 
     # New code
-    rc_packet_full = RCPacket("433MHz-cont-p-t1", sig_frames, 48)
+    rc_packet_full = RCPacket("403MHz-cont-p-LC-MW-t1", sig_frames[39900:79600], 48)
     rc_packet_full.analyze_bitstreams()
     rc_packet_full.print_bitstream_analysis()
     rc_packet_full.write_bitstream_analysis_to_file()
