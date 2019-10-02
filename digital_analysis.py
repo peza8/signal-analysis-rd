@@ -7,6 +7,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from collections import deque
+import datetime
 
 class RCPacket:
     def __init__ (self, packet_name, raw_signal, fs):
@@ -36,7 +37,7 @@ class RCPacket:
             index = index + 1
         
         # Temp - plot the digital signal
-        self.display_digital_sig("1", "Uncut digital signal")
+        # self.display_digital_sig("1", "Uncut digital signal")
 
     # Parse the whole signal and look for packets
     def getallpackets(self):
@@ -61,8 +62,7 @@ class RCPacket:
 
         # Got all bitstreams
         print("Got all bitstreams")
-        
-
+    
     def next_packet_search_start(self, start_index):
         # arb, based on common data pattern
         window_len = 100
@@ -137,6 +137,38 @@ class RCPacket:
     def display_digital_sig(self, fignum, title):
         RCPacket.plot_signal(self.digital_signal, fignum, title)
 
+    # Analyze and print to text file - all packet data. Verbose and succinct.
+    def analyze_bitstreams(self):
+        print("RC PACKET: Analyzing all bitstreams")
+
+        for bitstream in self.bitstreams:
+            bitstream.analyze_all_pulses()
+        
+        print("RC PACKET: Completed bitstream analysis")
+
+    def print_bitstream_analysis(self):
+        for bitstream in self.bitstreams:
+            bitstream.print_analysis()
+
+    def write_bitstream_analysis_to_file(self):
+        print("RC PACKET: Writing bitstream analysis to file")
+        date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+        filename = self.name + "_" + date_str + ".txt"
+        path = "./Analysis/"
+        full_path = path + filename
+        out_file = open(full_path,"w") 
+
+        for bitstream in self.bitstreams:
+            bitstream.print_to_file(out_file)
+        
+        out_file.write("Bitstream bit comparison (ignoring pre-amble):\n\n")
+
+        for bitstream in self.bitstreams:
+            bitstream.print_bitstr_to_file(out_file, True)
+
+        out_file.close()
+        print("RC PACKET: Completed file write %s" % filename)
+        
     @staticmethod
     def plot_signal(signal, fignum, title):
         plt.figure(fignum)
@@ -318,6 +350,26 @@ class BitstreamPacket:
         print("Bitstream: %s" % self.binary_str)
         print("\n")
 
+    def print_to_file(self, out_file):
+        l1 = "BITSTREAM: Displaying analysis for bitstream " + str(self.name) + "\n"
+        l2 = "Total pulses: %i    len(t): %2.2f ms    len(s): %i samples\n" % (self.pulse_count, self.pulse_width_t, self.pulse_width_s)
+        l3 = "Long  pulses: %i    len(t): %2.2f ms    len(s)  %i samples    H/L ratio: %f\n" % (self.long_pulse_c, self.long_pulse_t, self.long_pulse_s, self.long_pulse_r)
+        l4 = "Short pulses: %i    len(t): %2.2f ms    len(s)  %i samples    H/L ratio: %f\n" % (self.short_pulse_c, self.short_pulse_t, self.short_pulse_s, self.short_pulse_r)
+        l5 = "Bitstream: %s\n\n" % self.binary_str
+        lines = [l1,l2, l3, l4, l5]
+        out_file.writelines(lines)
+
+    def print_bitstr_to_file(self, out_file, skip_preamble):
+        # Writes all bitstreams to file
+        if not skip_preamble:
+            bitstr = self.binary_str + "\n"
+            out_file.write(bitstr)
+            return
+
+        # Will only write bitstreams == 66 bits to file
+        if len(self.binary_str) == 66:
+            bitstr = self.binary_str + "\n"
+            out_file.write(bitstr)
 
 class Pulse:
     def __init__(self, pulse_data, fs):

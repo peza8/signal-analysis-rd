@@ -38,50 +38,10 @@ def main():
     # PlotRFSignal(time, sig_frames, 1)
 
     # New code
-    rc_packet_full = RCPacket("First continuous press", sig_frames, 48)
-
-    # Packet A bounds
-    """
-    packet_A_start = 82000 - sample_start
-    packet_A_end = 86600 - sample_start
-    packet_A_sig = rf_digitized[packet_A_start : packet_A_end]
-    rc_packet_A = RCPacket("A", packet_A_sig, 82000, 86600, False, 48)
-    rc_packet_A.body.analyze_all_pulses()
-    rc_packet_A.body.print_analysis()
-    bitstreamA = rc_packet_A.body.bitstream
-    PlotSignal(bitstreamA, 1, "Bitstream A")
-
-    # Packet B
-    packet_B_start = 87150 - sample_start
-    packet_B_end = 91000 - sample_start
-    packet_B_sig = rf_digitized[packet_B_start : packet_B_end]
-    PlotSignal(packet_B_sig, 99, "Pakcet B Sig")
-    rc_packet_B = RCPacket("B", packet_B_sig, 87000, 91000, False, 48)
-    rc_packet_B.body.analyze_all_pulses()
-    rc_packet_B.body.print_analysis()
-    bitstreamB = rc_packet_B.body.bitstream
-    PlotSignal(bitstreamB, 2, "Bitstream B")
-
-    # Packet C
-    packet_C_start = 92300 - sample_start
-    packet_C_end = 96000 - sample_start
-    packet_C_sig = rf_digitized[packet_C_start : packet_C_end]
-    rc_packet_C = RCPacket("C", packet_C_sig, 92300, 96000, False, 48)
-    rc_packet_C.body.analyze_all_pulses()
-    rc_packet_C.body.print_analysis()
-    bitstreamC = rc_packet_C.body.bitstream
-    PlotSignal(bitstreamC, 3, "Bitstream C")
-
-    # Packet D
-    packet_D_start = 97550 - sample_start
-    packet_D_end = 101200 - sample_start
-    packet_D_sig = rf_digitized[packet_D_start : packet_D_end]
-    rc_packet_D = RCPacket("D", packet_C_sig, 97550, 101200, False, 48)
-    rc_packet_D.body.analyze_all_pulses()
-    rc_packet_D.body.print_analysis()
-    bitstreamD = rc_packet_D.body.bitstream
-    PlotSignal(bitstreamD, 4, "Bitstream D")
-    """
+    rc_packet_full = RCPacket("433MHz-cont-p-t1", sig_frames, 48)
+    rc_packet_full.analyze_bitstreams()
+    rc_packet_full.print_bitstream_analysis()
+    rc_packet_full.write_bitstream_analysis_to_file()
 
 def ReportWavMetrics(wav_obj):
     print( "Number of channels",wav_obj.getnchannels())
