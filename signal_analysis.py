@@ -25,7 +25,7 @@ print("MAIN: Starting signal processing")
 # plt.show()                   # Display the plot
 
 def main():
-    raw_sig = wave.open(rc_403mhz_cont_PC_MW_1, 'rb')
+    raw_sig = wave.open(rc_403mhz_cont_PC_MW_2, 'rb')
     ReportWavMetrics(raw_sig)
 
     # Interpret
@@ -36,7 +36,7 @@ def main():
     # PlotRFSignal(time, sig_frames, 1)
 
     # New code
-    rc_packet_full = RCPacket("403MHz-cont-p-LC-MW-t1", sig_frames[39900:79600], 48)
+    rc_packet_full = RCPacket("403MHz-cont-p-LC-MW-t2", sig_frames[0:-1], 48)
     rc_packet_full.analyze_bitstreams()
     rc_packet_full.print_bitstream_analysis()
     rc_packet_full.write_bitstream_analysis_to_file()
