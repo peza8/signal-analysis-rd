@@ -11,13 +11,11 @@ from scipy import signal
 from digital_analysis import RCPacket, BitstreamPacket
 
 # Test data
-sample_315mhz = "Data/315.022_FM-Sample-Bit-Alt.wav"
-sample_315mhz_2 = "Data/315.040_AM-squelsh-test.wav"
-sample_315mhz_3 = "Data/315.038_AM-high-low_t1.wav"
-rc_433mhz_1 = "Data/433.744_AM-RC-t1.wav"
-rc_433mhz_3 = "Data/433.744_AM-RC-t3.wav"
-rc_433mhz_7 = "Data/433.744_AM-RC-t7.wav"
 rc_433mhz_cont_1 = "Data/433.740_AM-cont-p-t1.wav"
+rc_433mhz_cont_2 = "Data/433.744_AM-cont-p-t2.wav"
+rc_433mhz_cont_3 = "Data/433.740_AM-cont-p-t3.wav"
+rc_403mhz_cont_PC_MW_1 = "Data/403.546_AM-MW-cont-p-t1.wav"
+rc_403mhz_cont_PC_MW_2 = "Data/403.546_AM-MW-cont-p-t2.wav"
 
 print("MAIN: Starting signal processing")
 
@@ -27,7 +25,7 @@ print("MAIN: Starting signal processing")
 # plt.show()                   # Display the plot
 
 def main():
-    raw_sig = wave.open(rc_433mhz_cont_1, 'rb')
+    raw_sig = wave.open(rc_403mhz_cont_PC_MW_1, 'rb')
     ReportWavMetrics(raw_sig)
 
     # Interpret
