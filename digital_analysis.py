@@ -12,7 +12,7 @@ import datetime
 class RCPacket:
     def __init__ (self, packet_name, raw_signal, fs):
         # Class 'consts'
-        self.digital_threshold = 2000 # can change
+        self.digital_threshold = 5000 # can change
 
         self.name = packet_name
         self.analogue_signal = raw_signal
@@ -267,7 +267,8 @@ class BitstreamPacket:
                     forward_bit = self.bitstream[j]
                     if forward_bit != 1:
                         filter_pass = False
-                        print("RE: Found noise at sample index %i" % i+j)
+                        fail_index = i+j
+                        print("RE: Found noise at sample index %i" % fail_index)
                         break
                 if not filter_pass:
                     continue
@@ -360,9 +361,11 @@ class BitstreamPacket:
         
         # Short pulses
         self.short_pulse_c = sp_count
-        self.short_pulse_s = total_sp_s/sp_count
-        self.short_pulse_t = self.short_pulse_s/self.sample_freq
-        self.short_pulse_r = cum_sp_ratio/sp_count
+        if (sp_count != 0):
+            self.short_pulse_c = sp_count
+            self.short_pulse_s = total_sp_s/sp_count
+            self.short_pulse_t = self.short_pulse_s/self.sample_freq
+            self.short_pulse_r = cum_sp_ratio/sp_count
 
         # Generic
         self.pulse_width_s = total_pulse_width_s

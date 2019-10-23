@@ -1,0 +1,86 @@
+BITSTREAM: Displaying analysis for bitstream 1
+Total pulses: 11    len(t): 7.94 ms    len(s): 381 samples
+Long  pulses: 1    len(t): 0.56 ms    len(s)  27 samples    H/L ratio: 0.666667
+Short pulses: 10    len(t): 0.74 ms    len(s)  35 samples    H/L ratio: 0.483095
+Bitstream: 11111111110
+
+BITSTREAM: Displaying analysis for bitstream 2
+Total pulses: 66    len(t): 72.56 ms    len(s): 3483 samples
+Long  pulses: 40    len(t): 1.10 ms    len(s)  52 samples    H/L ratio: 0.649147
+Short pulses: 26    len(t): 1.11 ms    len(s)  53 samples    H/L ratio: 0.318801
+Bitstream: 110000011100001001101010000000110000000101110011100111110010000010
+
+BITSTREAM: Displaying analysis for bitstream 3
+Total pulses: 11    len(t): 7.94 ms    len(s): 381 samples
+Long  pulses: 1    len(t): 0.54 ms    len(s)  26 samples    H/L ratio: 0.653846
+Short pulses: 10    len(t): 0.74 ms    len(s)  35 samples    H/L ratio: 0.481746
+Bitstream: 11111111110
+
+BITSTREAM: Displaying analysis for bitstream 4
+Total pulses: 66    len(t): 72.56 ms    len(s): 3483 samples
+Long  pulses: 40    len(t): 1.09 ms    len(s)  52 samples    H/L ratio: 0.645198
+Short pulses: 26    len(t): 1.11 ms    len(s)  53 samples    H/L ratio: 0.322206
+Bitstream: 110000011100001001101010000000110000000101110011100111110010000010
+
+BITSTREAM: Displaying analysis for bitstream 5
+Total pulses: 11    len(t): 7.92 ms    len(s): 380 samples
+Long  pulses: 1    len(t): 0.52 ms    len(s)  25 samples    H/L ratio: 0.640000
+Short pulses: 10    len(t): 0.74 ms    len(s)  35 samples    H/L ratio: 0.481746
+Bitstream: 11111111110
+
+BITSTREAM: Displaying analysis for bitstream 6
+Total pulses: 66    len(t): 72.56 ms    len(s): 3483 samples
+Long  pulses: 40    len(t): 1.10 ms    len(s)  52 samples    H/L ratio: 0.649138
+Short pulses: 26    len(t): 1.11 ms    len(s)  53 samples    H/L ratio: 0.320959
+Bitstream: 110000011100001001101010000000110000000101110011100111110010000010
+
+BITSTREAM: Displaying analysis for bitstream 7
+Total pulses: 11    len(t): 7.94 ms    len(s): 381 samples
+Long  pulses: 1    len(t): 0.54 ms    len(s)  26 samples    H/L ratio: 0.653846
+Short pulses: 10    len(t): 0.74 ms    len(s)  35 samples    H/L ratio: 0.476032
+Bitstream: 11111111110
+
+BITSTREAM: Displaying analysis for bitstream 8
+Total pulses: 66    len(t): 72.56 ms    len(s): 3483 samples
+Long  pulses: 40    len(t): 1.10 ms    len(s)  52 samples    H/L ratio: 0.646945
+Short pulses: 26    len(t): 1.10 ms    len(s)  53 samples    H/L ratio: 0.319061
+Bitstream: 110000011100001001101010000000110000000101110011100111110010000010
+
+BITSTREAM: Displaying analysis for bitstream 9
+Total pulses: 11    len(t): 7.94 ms    len(s): 381 samples
+Long  pulses: 1    len(t): 0.54 ms    len(s)  26 samples    H/L ratio: 0.653846
+Short pulses: 10    len(t): 0.74 ms    len(s)  35 samples    H/L ratio: 0.478889
+Bitstream: 11111111110
+
+BITSTREAM: Displaying analysis for bitstream 10
+Total pulses: 66    len(t): 72.54 ms    len(s): 3482 samples
+Long  pulses: 40    len(t): 1.10 ms    len(s)  52 samples    H/L ratio: 0.646002
+Short pulses: 26    len(t): 1.10 ms    len(s)  53 samples    H/L ratio: 0.320755
+Bitstream: 110000011100001001101010000000110000000101110011100111110010000010
+
+BITSTREAM: Displaying analysis for bitstream 11
+Total pulses: 11    len(t): 7.94 ms    len(s): 381 samples
+Long  pulses: 1    len(t): 0.54 ms    len(s)  26 samples    H/L ratio: 0.653846
+Short pulses: 10    len(t): 0.74 ms    len(s)  35 samples    H/L ratio: 0.481746
+Bitstream: 11111111110
+
+BITSTREAM: Displaying analysis for bitstream 12
+Total pulses: 66    len(t): 72.54 ms    len(s): 3482 samples
+Long  pulses: 40    len(t): 1.10 ms    len(s)  52 samples    H/L ratio: 0.645845
+Short pulses: 26    len(t): 1.10 ms    len(s)  53 samples    H/L ratio: 0.321946
+Bitstream: 110000011100001001101010000000110000000101110011100111110010000010
+
+BITSTREAM: Displaying analysis for bitstream 13
+Total pulses: 11    len(t): 7.94 ms    len(s): 381 samples
+Long  pulses: 1    len(t): 0.54 ms    len(s)  26 samples    H/L ratio: 0.653846
+Short pulses: 10    len(t): 0.74 ms    len(s)  35 samples    H/L ratio: 0.478889
+Bitstream: 11111111110
+
+BITSTREAM: Displaying analysis for bitstream 14
+Total pulses: 66    len(t): 72.56 ms    len(s): 3483 samples
+Long  pulses: 40    len(t): 1.09 ms    len(s)  52 samples    H/L ratio: 0.648183
+Short pulses: 26    len(t): 1.11 ms    len(s)  53 samples    H/L ratio: 0.323657
+Bitstream: 110000011100001001101010000000110000000101110011100111110010000010
+
+Bitstream bit comparison (ignoring pre-amble):
+

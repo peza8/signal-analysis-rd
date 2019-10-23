@@ -1,0 +1,2 @@
+Bitstream bit comparison (ignoring pre-amble):
+

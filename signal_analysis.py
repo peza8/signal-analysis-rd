@@ -11,11 +11,9 @@ from scipy import signal
 from digital_analysis import RCPacket, BitstreamPacket
 
 # Test data
-rc_433mhz_cont_1 = "Data/433.740_AM-cont-p-t1.wav"
-rc_433mhz_cont_2 = "Data/433.744_AM-cont-p-t2.wav"
-rc_433mhz_cont_3 = "Data/433.740_AM-cont-p-t3.wav"
-rc_403mhz_cont_PC_MW_1 = "Data/403.546_AM-MW-cont-p-t1.wav"
-rc_403mhz_cont_PC_MW_2 = "Data/403.546_AM-MW-cont-p-t2.wav"
+rc_433mhz_et_nice_learnt_01 = "Data/ET-Nice/433.870_AM_ET-Nice-cp_learnt2rx.wav"
+rc_433mhz_et_nice_learnt_02 = "Data/ET-Nice/433.872_AM_ET-Nice-cp_learnt2rx_02.wav"
+rc_433mhz_et_nice_learnt_03 = "Data/ET-Nice/433.865_AM-ET-Nice_learnt2rx_01-2press.wav"
 
 print("MAIN: Starting signal processing")
 
@@ -25,7 +23,7 @@ print("MAIN: Starting signal processing")
 # plt.show()                   # Display the plot
 
 def main():
-    raw_sig = wave.open(rc_403mhz_cont_PC_MW_2, 'rb')
+    raw_sig = wave.open(rc_433mhz_et_nice_learnt_03, 'rb')
     ReportWavMetrics(raw_sig)
 
     # Interpret
@@ -33,10 +31,16 @@ def main():
     fs = raw_sig.getframerate()
     time = np.linspace(0, len(sig_frames), num=len(sig_frames))
     raw_sig.close()
-    # PlotRFSignal(time, sig_frames, 1)
+    PlotRFSignal(time, sig_frames, 1)
+
+    # Hormann special analysis [stays high between pre-amble and signal]
+    # packet_extract = sig_frames[63485 : 67368]
+    # zero_packet = np.array([0] * 1000)
+    # frames = np.append(zero_packet, packet_extract)
+    # frames = np.append(frames, zero_packet)
 
     # New code
-    rc_packet_full = RCPacket("403MHz-cont-p-LC-MW-t2", sig_frames[0:-1], 48)
+    rc_packet_full = RCPacket("ET-Nice-learnt_01", sig_frames[135000:-1], 48)      # frames
     rc_packet_full.analyze_bitstreams()
     rc_packet_full.print_bitstream_analysis()
     rc_packet_full.write_bitstream_analysis_to_file()

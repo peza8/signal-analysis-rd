@@ -1,0 +1,8 @@
+BITSTREAM: Displaying analysis for bitstream 1
+Total pulses: 140    len(t): 78.94 ms    len(s): 3789 samples
+Long  pulses: 24    len(t): 0.66 ms    len(s)  31 samples    H/L ratio: 0.653705
+Short pulses: 116    len(t): 0.54 ms    len(s)  26 samples    H/L ratio: 0.454144
+Bitstream: 10111111111111111111011111111010110111111101110101101111111110111011111111011111101111111011101111101111111111101110111101011101111011111010
+
+Bitstream bit comparison (ignoring pre-amble):
+
